@@ -12,13 +12,13 @@ class PageParser():
 
         self.url = url
         self.soup = BeautifulSoup(r.text, 'html.parser')
-        self.content = self.get_page_content()
 
-    def get_page_content(self, tag='p'):
+    def get_content(self, tag='p'):
         '''
             Extracts a list of Tag objects that match the given
-            criteria and returns the list of all child strings
+            criteria and returns an object of type Document
 
             :param tag: the html elements to be extracted, defaults to paragraph
         '''
-        return [p.get_text() for p in self.soup.find_all(tag)]
+        text = ''.join([p.get_text() for p in self.soup.find_all(tag)])
+        return text
