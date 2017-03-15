@@ -9,7 +9,7 @@ app = Flask(__name__)
 def index(content=None):
     if request.method == 'POST':
         doc = Document(url=request.form['url'])
-        content = doc.text
+        content = doc.summary()
     return render_template('index.html', content=content)
 
 
