@@ -1,3 +1,4 @@
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -21,4 +22,4 @@ class PageParser():
             :param tag: the html elements to be extracted, defaults to paragraph
         '''
         text = ''.join([p.get_text() for p in self.soup.find_all(tag)])
-        return text
+        return re.sub(' {2,}|\\n+', '', text)

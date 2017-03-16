@@ -1,3 +1,4 @@
+import re
 import nltk
 import numpy as np
 from nltk.tokenize import RegexpTokenizer
@@ -35,7 +36,7 @@ class Document():
 
         self.text = text
 
-        sentences = nltk.sent_tokenize(text)
+        sentences = re.split('\\. *', text)
         self.sentences = [Sentence(s) for s in sentences]
 
     def summary(self, ratio=0.2):
