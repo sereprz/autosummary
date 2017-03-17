@@ -3,6 +3,7 @@ import nltk
 import numpy as np
 from nltk.tokenize import RegexpTokenizer
 from gensim.models import KeyedVectors
+from scipy.spatial.distance import cosine
 
 from autosummary.parser import PageParser
 
@@ -20,7 +21,14 @@ class Sentence():
 
         self.text = text
         self.tokens = [w for w in tokenizer.tokenize(text) if w not in stopwords]
-        self.length = len(self.tokens)
+        self.vect = self.to_vector()
+
+    def to_vector(self):
+        '''
+            Vector representation of a sentence as sum of all it's tokens in the
+            word2vec space
+        '''
+        return np.mean([w2v[w] for w in self.tokens if w in w2v.vocab])
 
 
 class Document():
@@ -36,19 +44,39 @@ class Document():
 
         self.text = text
 
-        sentences = re.split('\\. *', text)
-        self.sentences = [Sentence(s) for s in sentences]
+        # split sentences and remove text between parentheses
+        # (assuming it's not relevant)
+        sentences = re.split('\\)*\\. *', re.sub('\(.*?\)', '', text))[:-1]
+        self.sentences = dict(
+            zip(range(len(sentences)), [Sentence(s) for s in sentences]))
+
+    def pairwise_dist(self):
+        '''
+            Calculate matrix of pairwise cosine similarities between sentences
+        '''
+        n = len(self.sentences)
+        m_dist = np.empty((n, n))
+
+        for i in range(n):
+            for j in range(i, n):
+                if i == j:
+                    m_dist[i, j] = 0
+                else:
+                    m_dist[i, j] = cosine(self.sentences[i].vect, self.sentences[j].vect)
+                    m_dist[j, i] = m_dist[i, j]
+        return m_dist
 
     def summary(self, ratio=0.2):
         '''
-            Summary of the document. Each sentence is scored and ranked based
-            on the total Word Mover's Distance from every other sentence in the text
+            Summary of the document by extraction of key sentences.
+            Each sentence is scored and ranked based on the total cosine
+            distance from every other sentence in the text
 
             :param ratio: float, proportion of sentences do be included in the
             summary
         '''
-        scored = [(s.text, np.mean([w2v.wmdistance(s.text, s_.text)
-                  for s_ in self.sentences]))
-                  for s in self.sentences]
+        scored = zip(range(len(self.sentences)), np.sum(self.pairwise_dist(), axis=1))
         ranked = sorted(scored, key=lambda x: x[1])
-        return '\n'.join([s for s, r in ranked[:int(len(ranked)*ratio)]])
+        n_ = int(len(ranked) * ratio)
+        return '. '.join([value.text for key, value in self.sentences.items()
+                          if key in [i for (i, s) in ranked[:n_]]])
