@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     <title>Auto-Summary</title>
 
@@ -17,27 +18,35 @@
     <div class='container'>
 
       <div class="page-header">
-        <h2>Auto-Summary <small>A simple summarisation tool for web pages</small></h2>
+        <h2>Auto-Summary <small>A simple summarisation tool</small></h2>
       </div>
     </div>
 
-    <div class='row row-buffer'>
-      <div class="container">
-        <div class="col-lg-6">
-          <form action="" method="post">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for..." name="url">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">Go!</button>
-              </span>
-            </div>
-          </form>
+    <div class='container'>
+      <form action='' method='post'>
+        <p>Paste the link to a page and click the button to extract a summary</p>
+        <div class='form-group'>
+          <div class='input-group'>
+            <span class='input-group-addon'>Url</span>
+            <input type='text' class='form-control' placeholder='Url' name='url'>
+          </div>
+        </div>
+        <button type='submit' class='btn btn-default'>Summarize</button>
+      </form>
+    </div>
+
+    {% if warning == 'True' %}
+      <div class='container'>
+        <div class='row row-buffer'>
+          <div class='col-lg-6'>
+            <div class="alert alert-danger" role="alert"><strong>Oops!</strong> Looks like you forgot the input</div>
+          </div>
         </div>
       </div>
-    </div>
+    {% endif %}
 
-    <div class='row row-buffer'>
-      <div class='container'>
+    <div class='container'>
+      <div class='row row-buffer'>
         <div class='col-lg-6'>
           <div class='panel panel-default'>
             <div class='panel-body'>
