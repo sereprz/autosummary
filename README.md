@@ -14,4 +14,4 @@ The final summary is built by ranking the sentences according to their final sco
 ### TODO
 - [ ] improve parser
 - [ ] code TextRank
-- [ ] text as input (rather than url)
+- [x] text as input

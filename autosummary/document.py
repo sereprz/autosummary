@@ -78,5 +78,5 @@ class Document():
         scored = zip(range(len(self.sentences)), np.sum(self.pairwise_dist(), axis=1))
         ranked = sorted(scored, key=lambda x: x[1])
         n_ = int(len(ranked) * ratio)
-        return '. '.join([value.text for key, value in self.sentences.items()
-                          if key in [i for (i, s) in ranked[:n_]]])
+        return [value.text for key, value in self.sentences.items()
+                if key in [i for (i, s) in ranked[:n_]]]

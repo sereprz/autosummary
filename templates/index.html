@@ -24,14 +24,18 @@
 
     <div class='container'>
       <form action='' method='post'>
-        <p>Paste the link to a page and click the button to extract a summary</p>
         <div class='form-group'>
-          <div class='input-group'>
-            <span class='input-group-addon'>Url</span>
-            <input type='text' class='form-control' placeholder='Url' name='url'>
-          </div>
+            <textarea class="form-control" rows="3" placeholder='Paste some text here' name='raw'></textarea>
         </div>
-        <button type='submit' class='btn btn-default'>Summarize</button>
+        <div class='form-group'>
+          <!-- <div class='input-group'>
+            <span class='input-group-addon'>Url</span> -->
+            <input type='text' class='form-control' placeholder='Or paste a url here' name='url'>
+          <!-- </div> -->
+        </div>
+        <div class='form-group text-center'>
+          <button type='submit' class='btn btn-default'>Summarize</button>
+        </div>
       </form>
     </div>
 
@@ -51,7 +55,9 @@
           <div class='panel panel-default'>
             <div class='panel-body'>
               {% if content %}
-                  <p>{{content}}</p>
+                {% for p in content %}
+                  <p>{{p}}</p>
+                {% endfor %}
               {% else %}
                 <p></p>
               {% endif %}

@@ -9,8 +9,9 @@ app = Flask(__name__)
 def index(content=None, warning=False):
     if request.method == 'POST':
         if request.form['url']:
-            doc = Document(url=request.form['url'])
-            content = doc.summary()
+            content = Document(url=request.form['url']).summary()
+        elif request.form['raw']:
+            content = Document(text=request.form['raw']).summary()
         else:
             warning = True
     return render_template('index.html', content=content, warning=str(warning))
