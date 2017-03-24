@@ -5,7 +5,8 @@ from nltk.tokenize import RegexpTokenizer
 from gensim.models import KeyedVectors
 from scipy.spatial.distance import cosine
 
-from autosummary.parser import PageParser
+#from autosummary.parser import PageParser
+from newspaper import Article
 
 stopwords = nltk.corpus.stopwords.words('english')
 w_tokenizer = RegexpTokenizer(r'\w+')
@@ -41,8 +42,12 @@ class Document():
             raise TypeError('Missing required argument: url or text')
 
         if url:
-            parser = PageParser(url=url)
-            text = parser.get_content()
+            #parser = PageParser(url=url)
+            #text = parser.get_content()
+            a = Article(url)
+            a.download()
+            a.parse()
+            text = a.text
 
         self.text = text
 
@@ -52,7 +57,7 @@ class Document():
         text = re.sub('\(.*?\)', '', text)
         sentences = [''.join(grp).strip() for grp in sent_tokenizer.tokenize(text)]
         self.sentences = dict(
-            zip(range(len(sentences)), [Sentence(s) for s in sentences]))
+            zip(range(len(sentences)), [Sentence(s) for s in sentences if len(s) > 1]))
 
     def pairwise_dist(self):
         '''
