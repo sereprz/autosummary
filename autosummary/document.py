@@ -8,7 +8,9 @@ from scipy.spatial.distance import cosine
 from autosummary.parser import PageParser
 
 stopwords = nltk.corpus.stopwords.words('english')
-tokenizer = RegexpTokenizer(r'\w+')
+w_tokenizer = RegexpTokenizer(r'\w+')
+REGEX = re.compile(u'([^\u201c\u201d.]*)(\u201c[^\u201c\u201d]*\u201d)*([^\u201c\u201d.]*[.?!])')
+sent_tokenizer = RegexpTokenizer(REGEX)
 
 w2v = KeyedVectors.load_word2vec_format(
     fname='./data/GoogleNews-vectors-negative300.bin',
@@ -20,7 +22,7 @@ class Sentence():
     def __init__(self, text):
 
         self.text = text
-        self.tokens = [w for w in tokenizer.tokenize(text) if w not in stopwords]
+        self.tokens = [w for w in w_tokenizer.tokenize(text) if w not in stopwords]
         self.vect = self.to_vector()
 
     def to_vector(self):
@@ -46,7 +48,9 @@ class Document():
 
         # split sentences and remove text between parentheses
         # (assuming it's not relevant)
-        sentences = re.split('\\)*\\. *', re.sub('\(.*?\)', '', text))[:-1]
+        #sentences = re.split('\\)*\\. *', re.sub('\(.*?\)', '', text))[:-1]
+        text = re.sub('\(.*?\)', '', text)
+        sentences = [''.join(grp).strip() for grp in sent_tokenizer.tokenize(text)]
         self.sentences = dict(
             zip(range(len(sentences)), [Sentence(s) for s in sentences]))
 
