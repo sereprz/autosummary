@@ -1,17 +1,13 @@
 import re
 import nltk
 import numpy as np
-from nltk.tokenize import RegexpTokenizer
+from nltk import sent_tokenize, word_tokenize
 from gensim.models import KeyedVectors
 from scipy.spatial.distance import cosine
 
-#from autosummary.parser import PageParser
-from newspaper import Article
+from autosummary.parser import PageParser
 
 stopwords = nltk.corpus.stopwords.words('english')
-w_tokenizer = RegexpTokenizer(r'\w+')
-REGEX = re.compile(u'([^\u201c\u201d.]*)(\u201c[^\u201c\u201d]*\u201d)*([^\u201c\u201d.]*[.?!])')
-sent_tokenizer = RegexpTokenizer(REGEX)
 
 w2v = KeyedVectors.load_word2vec_format(
     fname='./data/GoogleNews-vectors-negative300.bin',
@@ -23,7 +19,7 @@ class Sentence():
     def __init__(self, text):
 
         self.text = text
-        self.tokens = [w for w in w_tokenizer.tokenize(text) if w not in stopwords]
+        self.tokens = [w for w in word_tokenize(text) if w not in stopwords]
         self.vect = self.to_vector()
 
     def to_vector(self):
@@ -31,7 +27,7 @@ class Sentence():
             Vector representation of a sentence as sum of all it's tokens in the
             word2vec space
         '''
-        return np.mean([w2v[w] for w in self.tokens if w in w2v.vocab])
+        return np.mean([w2v[w] for w in self.tokens if w in w2v.vocab], axis=0)
 
 
 class Document():
@@ -42,20 +38,14 @@ class Document():
             raise TypeError('Missing required argument: url or text')
 
         if url:
-            #parser = PageParser(url=url)
-            #text = parser.get_content()
-            a = Article(url)
-            a.download()
-            a.parse()
-            text = a.text
+            text = PageParser(url=url).raw
 
         self.text = text
 
         # split sentences and remove text between parentheses
         # (assuming it's not relevant)
-        #sentences = re.split('\\)*\\. *', re.sub('\(.*?\)', '', text))[:-1]
         text = re.sub('\(.*?\)', '', text)
-        sentences = [''.join(grp).strip() for grp in sent_tokenizer.tokenize(text)]
+        sentences = sent_tokenize(text)
         self.sentences = dict(
             zip(range(len(sentences)), [Sentence(s) for s in sentences if len(s) > 1]))
 
@@ -71,7 +61,10 @@ class Document():
                 if i == j:
                     m_dist[i, j] = 0
                 else:
-                    m_dist[i, j] = cosine(self.sentences[i].vect, self.sentences[j].vect)
+                    try:
+                        m_dist[i, j] = cosine(self.sentences[i].vect, self.sentences[j].vect)
+                    except:
+                        m_dist[i, j] = 1
                     m_dist[j, i] = m_dist[i, j]
         return m_dist
 

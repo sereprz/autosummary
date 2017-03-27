@@ -25,7 +25,7 @@
     <div class='container'>
       <form action='' method='post'>
         <div class='form-group'>
-            <textarea class="form-control" rows="3" placeholder='Paste some text here' name='raw'></textarea>
+            <textarea class="form-control" rows="9" placeholder='Paste some text here' name='raw'></textarea>
         </div>
         <div class='form-group'>
           <!-- <div class='input-group'>
@@ -35,6 +35,7 @@
         </div>
         <div class='form-group text-center'>
           <button type='submit' class='btn btn-default'>Summarize</button>
+          <a href="{{ url_for('index') }}" class='btn btn-default' role='button'>Reset</a>
         </div>
       </form>
     </div>
@@ -42,30 +43,32 @@
     {% if warning == 'True' %}
       <div class='container'>
         <div class='row row-buffer'>
-          <div class='col-lg-6'>
+          <div class='col-lg-5'>
             <div class="alert alert-danger" role="alert"><strong>Oops!</strong> Looks like you forgot the input</div>
           </div>
         </div>
       </div>
     {% endif %}
 
+    {% if content %}
     <div class='container'>
       <div class='row row-buffer'>
-        <div class='col-lg-6'>
+        <div class='col-lg-5'>
           <div class='panel panel-default'>
             <div class='panel-body'>
-              {% if content %}
+
                 {% for p in content %}
                   <p>{{p}}</p>
                 {% endfor %}
               {% else %}
                 <p></p>
-              {% endif %}
+
             </div>
           </div>
         </div>
       </div>
     </div>
+    {% endif %}
 
   </body>
 

@@ -13,6 +13,7 @@ class PageParser():
 
         self.url = url
         self.soup = BeautifulSoup(r.text, 'html.parser')
+        self.raw = self.get_content()
 
     def get_content(self, tag='p'):
         '''
@@ -21,6 +22,7 @@ class PageParser():
 
             :param tag: the html elements to be extracted, defaults to paragraph
         '''
-        paragraphs = [p.get_text().strip() for p in self.soup.find_all(tag)]
+        paragraphs = [p.get_text().strip() for p in self.soup.find_all(tag)
+                      if len(p.get_text()) > 1]
         text = ' '.join([p if p[-1] == '.' else p + '.' for p in paragraphs])
         return re.sub(' {2,}|\\n+', '', text)
