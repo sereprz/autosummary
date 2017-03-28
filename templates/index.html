@@ -14,44 +14,35 @@
   </head>
 
   <body>
-
     <div class='container'>
-
       <div class="page-header">
         <h2>Auto-Summary <small>A simple summarisation tool</small></h2>
       </div>
-    </div>
 
-    <div class='container'>
-      <form action='' method='post'>
-        <div class='form-group'>
-            <textarea class="form-control" rows="9" placeholder='Paste some text here' name='raw'></textarea>
-        </div>
-        <div class='form-group'>
-          <!-- <div class='input-group'>
-            <span class='input-group-addon'>Url</span> -->
-            <input type='text' class='form-control' placeholder='Or paste a url here' name='url'>
-          <!-- </div> -->
-        </div>
-        <div class='form-group text-center'>
-          <button type='submit' class='btn btn-default'>Summarize</button>
-          <a href="{{ url_for('index') }}" class='btn btn-default' role='button'>Reset</a>
-        </div>
-      </form>
-    </div>
-
-    {% if warning == 'True' %}
-      <div class='container'>
-        <div class='row row-buffer'>
-          <div class='col-lg-5'>
-            <div class="alert alert-danger" role="alert"><strong>Oops!</strong> Looks like you forgot the input</div>
+      <div class='row row-buffer'>
+        <form action='' method='post'>
+          <div class='form-group'>
+              <textarea class="form-control" rows="9" placeholder='Paste some text here' name='raw'></textarea>
           </div>
-        </div>
+          <div class='form-group'>
+            <input type='text' class='form-control' placeholder='Or paste a url here' name='url'>
+          </div>
+          <div class='form-group text-center'>
+            <button type='submit' class='btn btn-default'>Summarize</button>
+            <a href="{{ url_for('index') }}" class='btn btn-default' role='button'>Reset</a>
+          </div>
+        </form>
       </div>
-    {% endif %}
 
-    {% if content %}
-    <div class='container'>
+      {% if warning == 'True' %}
+          <div class='row row-buffer'>
+            <div class='col-lg-5'>
+              <div class="alert alert-danger" role="alert"><strong>Oops!</strong> Looks like you forgot the input</div>
+            </div>
+          </div>
+      {% endif %}
+
+      {% if content %}
       <div class='row row-buffer'>
         <div class='col-lg-5'>
           <div class='panel panel-default'>
@@ -67,9 +58,13 @@
           </div>
         </div>
       </div>
+      {% endif %}
     </div>
-    {% endif %}
-
+    <footer>
+      <div class='container'>
+        <p class='help-block text-center'>This is a working draft. See the code <a href='https://github.com/sereprz/autosummary'>here</a></p>
+      </div>
+    </footer>
   </body>
 
 </html>
