@@ -10,7 +10,7 @@ from autosummary.parser import PageParser
 stopwords = nltk.corpus.stopwords.words('english')
 
 w2v = KeyedVectors.load_word2vec_format(
-    fname='./data/GoogleNews-vectors-negative300.bin',
+    fname='./data/w2v-brown.bin',
     binary=True)
 
 
