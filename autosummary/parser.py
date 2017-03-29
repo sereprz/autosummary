@@ -23,6 +23,6 @@ class PageParser():
             :param tag: the html elements to be extracted, defaults to paragraph
         '''
         paragraphs = [p.get_text().strip() for p in self.soup.find_all(tag)
-                      if len(p.get_text()) > 1]
+                      if len(p.get_text().strip()) > 1]
         text = ' '.join([p if p[-1] == '.' else p + '.' for p in paragraphs])
         return re.sub(' {2,}|\\n+', '', text)
