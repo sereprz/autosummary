@@ -6,7 +6,7 @@ from autosummary.document import Document
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/autosummary', methods=['GET', 'POST'])
 def index(content=None, warning=None):
     if request.method == 'POST':
         if request.form['url'] and request.form['raw']:
