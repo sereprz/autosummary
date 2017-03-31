@@ -15,9 +15,8 @@ def index(content=None, warning=None):
             if request.form['url']:
                 try:
                     content = Document(url=request.form['url']).summary()
-                except requests.exceptions.MissingSchema:
-                    warning = 'Invalid URL. Did you mean http://{}?'.format(
-                        request.form['url'])
+                except requests.exceptions.RequestException as e:
+                    warning = format(e)
             elif request.form['raw']:
                 content = Document(text=request.form['raw']).summary()
             else:
