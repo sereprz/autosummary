@@ -81,4 +81,4 @@ class Document():
         ranked = sorted(scored, key=lambda x: x[1])
         n_ = int(len(ranked) * ratio)
         return [value.text for key, value in self.sentences.items()
-                if key in [i for (i, s) in ranked[:n_]]]
+                if key in [i for (i, s) in ranked[:(n_ if n_ > 0 else 1)]]]
