@@ -37,10 +37,10 @@
       </div>
       </div>
 
-      {% if warning == 'True' %}
+      {% if warning %}
           <div class='row row-buffer'>
             <div class='col-lg-12'>
-              <div class="alert alert-danger" role="alert"><strong>Oops!</strong> Looks like you forgot the input</div>
+              <div class="alert alert-danger" role="alert">{{warning}}</div>
             </div>
           </div>
       {% endif %}
