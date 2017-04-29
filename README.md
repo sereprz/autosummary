@@ -13,7 +13,7 @@ The final summary is built by ranking the sentences according to their final sco
 
 ### TODO
 - [x] text as input
-- [ ] input percentage of text to keep (slider)
+- [x] input percentage of text to keep (slider)
 - [ ] train word2vec from scratch
 - [ ] improve parser
 - [ ] code TextRank

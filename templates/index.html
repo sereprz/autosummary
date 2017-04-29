@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='assets/favicon.ico') }}">
     <script src="https://use.fontawesome.com/9912f1d462.js"></script>
+    <script type="text/javascript">
+      function showValue(newValue) {
+        document.getElementById('perc').innerHTML=newValue; }
+    </script>
     <title>Auto-Summary</title>
 
   </head>
@@ -29,6 +33,10 @@
           <div class='form-group'>
             <p>Or fetch it from a URL:</p>
             <input type='text' class='form-control' placeholder='https://www.theguardian.com/books/2015/mar/20/lewis-carroll-alice-in-wonderland-adventures-150-years' name='url'>
+          </div>
+          <div class='form-group'>
+            <p>Set the percentage of text to keep in the summary: <span id='perc'>20</span>%</p>
+            <input type='range' min='5', max='100' value='20' step='5' class='form-control' name='slider' onchange="showValue(this.value)">
           </div>
           <div class='form-group text-center'>
             <button type='submit' class='btn btn-default'>Summarize</button>
